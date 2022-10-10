@@ -1,7 +1,10 @@
 package tyulyukov.resumebuilderspring.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import tyulyukov.resumebuilderspring.exception.CustomException;
 import tyulyukov.resumebuilderspring.model.Resume;
 import tyulyukov.resumebuilderspring.repository.*;
 import tyulyukov.resumebuilderspring.security.JwtTokenProvider;
@@ -68,5 +71,24 @@ public class ResumeService {
     var resumes = resumeRepository.findResumesByUser(user);
 
     return resumes;
+  }
+
+  public Resume getById(int id, HttpServletRequest req) {
+    var user = userRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+    var resumes = resumeRepository.findResumesByUser(user);
+
+    Resume resumeById = null;
+    for (var resume:
+            resumes) {
+      if (resume.getId() == id) {
+        resumeById = resume;
+        break;
+      }
+    }
+
+    if (resumeById == null)
+      throw new CustomException("Resume not found", HttpStatus.NOT_FOUND);
+
+    return resumeById;
   }
 }

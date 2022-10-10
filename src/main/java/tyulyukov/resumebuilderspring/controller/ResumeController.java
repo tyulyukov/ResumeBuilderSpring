@@ -4,19 +4,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tyulyukov.resumebuilderspring.model.Resume;
+import tyulyukov.resumebuilderspring.service.ResumePDFService;
 import tyulyukov.resumebuilderspring.service.ResumeService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.net.URISyntaxException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/resumes")
 public class ResumeController {
   private final ResumeService resumeService;
+  private final ResumePDFService resumePdfService;
 
-  public ResumeController(ResumeService resumeService) {
+  public ResumeController(ResumeService resumeService, ResumePDFService resumePdfService) {
     this.resumeService = resumeService;
+    this.resumePdfService = resumePdfService;
   }
 
   @GetMapping("/")
@@ -27,7 +30,7 @@ public class ResumeController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<String> create(@RequestBody Resume resume, HttpServletRequest req) throws URISyntaxException {
+  public ResponseEntity<String> create(@RequestBody Resume resume, HttpServletRequest req) {
     resumeService.create(resume, req);
 
     return ResponseEntity
@@ -36,7 +39,17 @@ public class ResumeController {
   }
 
   @GetMapping("/download/{id}")
-  public void download(@PathVariable long id) {
+  public ResponseEntity<String> download(@PathVariable int id, HttpServletRequest req, HttpServletResponse res) {
+    var resume = resumeService.getById(id, req);
 
+    try {
+      resumePdfService.download(resume, res);
+    } catch (IOException e) {
+      return ResponseEntity
+              .status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body("Exception was thrown during loading PDF file");
+    }
+
+    return ResponseEntity.ok("Resume PDF downloaded");
   }
 }
