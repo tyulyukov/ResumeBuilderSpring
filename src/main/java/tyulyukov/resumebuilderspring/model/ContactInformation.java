@@ -1,5 +1,6 @@
 package tyulyukov.resumebuilderspring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties({"resume"})
 public class ContactInformation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

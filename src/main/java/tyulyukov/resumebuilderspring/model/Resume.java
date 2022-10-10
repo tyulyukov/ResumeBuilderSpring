@@ -1,5 +1,8 @@
 package tyulyukov.resumebuilderspring.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,23 +23,21 @@ public class Resume {
   private String description;
 
   @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "contact_information_id", referencedColumnName = "id")
+  @JoinColumn(name = "contact_information_id")
   private ContactInformation contactInformation;
 
-  @OneToMany
-  @JoinColumn(name = "user_education_id")
+  @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "resume")
   private Set<Education> educations;
 
-  @OneToMany
-  @JoinColumn(name = "user_skill_id")
+  @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "resume")
   private Set<Skill> skills;
 
-  @OneToMany
-  @JoinColumn(name = "user_language_id")
+  @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "resume")
   private Set<Language> languages;
 
   @ManyToOne
   @JoinColumn(name = "user_resume_id")
+  @JsonBackReference
   private User user;
 
   @CreationTimestamp

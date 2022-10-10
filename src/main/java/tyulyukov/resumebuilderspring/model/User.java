@@ -29,8 +29,7 @@ public class User {
   @ElementCollection(fetch = FetchType.EAGER)
   private List<UserRole> userRoles;
 
-  @OneToMany
-  @JoinColumn(name = "user_resume_id")
+  @OneToMany(mappedBy = "user")
   private Set<Resume> userResumes;
 
   @CreationTimestamp
