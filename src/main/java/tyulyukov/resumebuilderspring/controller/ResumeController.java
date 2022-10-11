@@ -40,7 +40,7 @@ public class ResumeController {
 
   @GetMapping("/download/{id}")
   public ResponseEntity<String> download(@PathVariable int id, HttpServletRequest req, HttpServletResponse res) {
-    var resume = resumeService.getById(id, req);
+    var resume = resumeService.get(id, req);
 
     try {
       resumePdfService.download(resume, res);
@@ -51,5 +51,19 @@ public class ResumeController {
     }
 
     return ResponseEntity.ok("Resume PDF downloaded");
+  }
+
+  @DeleteMapping("/delete/{id}")
+  public ResponseEntity<String> delete(@PathVariable int id, HttpServletRequest req) {
+    resumeService.delete(id, req);
+
+    return ResponseEntity.ok("Resume deleted successfully");
+  }
+
+  @PatchMapping("/edit/{id}")
+  public ResponseEntity<String> edit(@PathVariable int id, @RequestBody Resume newResume, HttpServletRequest req) {
+    resumeService.edit(id, newResume, req);
+
+    return ResponseEntity.ok("Resume deleted successfully");
   }
 }

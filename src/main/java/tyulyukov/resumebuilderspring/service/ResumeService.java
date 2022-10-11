@@ -2,7 +2,6 @@ package tyulyukov.resumebuilderspring.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tyulyukov.resumebuilderspring.exception.CustomException;
 import tyulyukov.resumebuilderspring.model.Resume;
@@ -58,12 +57,13 @@ public class ResumeService {
     }
   }
 
-  public void delete() {
-
+  public void delete(int id, HttpServletRequest req) {
+    var resume = getById(id, req);
+    resumeRepository.deleteById(resume.getId());
   }
 
-  public void edit() {
-
+  public void edit(int id, Resume newResume, HttpServletRequest req) {
+    // resumeRepository.
   }
 
   public Resume[] getUserResumes(HttpServletRequest req) {
@@ -73,7 +73,11 @@ public class ResumeService {
     return resumes;
   }
 
-  public Resume getById(int id, HttpServletRequest req) {
+  public Resume get(int id, HttpServletRequest req) {
+    return getById(id, req);
+  }
+
+  private Resume getById(int id, HttpServletRequest req) {
     var user = userRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
     var resumes = resumeRepository.findResumesByUser(user);
 

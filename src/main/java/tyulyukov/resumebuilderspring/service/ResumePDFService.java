@@ -124,6 +124,63 @@ public class ResumePDFService {
       document.add(educationInfo);
     }
 
+    if (resume.getSkills().size() > 0) {
+      var skillInfo = new Paragraph();
+
+      var skillHeader = new Chunk("SKILLS", subheaderFont);
+      skillHeader.setUnderline(0.1f, -2f);
+
+      skillInfo.add(skillHeader);
+      skillInfo.add(spacing);
+
+      var skillsList = new List();
+
+      for (var skill : resume.getSkills()) {
+        var skillItem = new ListItem();
+
+        var educationItemHeader = new Chunk(skill.getName(), textFont);
+        skillItem.add(educationItemHeader);
+        skillItem.add(spacing);
+
+        skillsList.add(skillItem);
+      }
+
+      skillInfo.add(skillsList);
+
+      document.add(skillInfo);
+    }
+
+    if (resume.getLanguages().size() > 0) {
+      var languageInfo = new Paragraph();
+
+      var languageHeader = new Chunk("LANGUAGES", subheaderFont);
+      languageHeader.setUnderline(0.1f, -2f);
+
+      languageInfo.add(languageHeader);
+      languageInfo.add(spacing);
+
+      var languagesList = new List();
+
+      for (var language : resume.getLanguages()) {
+        var languageItem = new ListItem();
+
+        var languageItemHeader = new Chunk(language.getName(), textFont);
+        languageItem.add(languageItemHeader);
+        languageItem.add(spacing);
+
+        if (language.getLevel() != null) {
+          languageItem.add(new Chunk("Level: " + language.getLevel(), textFont));
+          languageItem.add(spacing);
+        }
+
+        languagesList.add(languageItem);
+      }
+
+      languageInfo.add(languagesList);
+
+      document.add(languageInfo);
+    }
+
     document.close();
   }
 }
