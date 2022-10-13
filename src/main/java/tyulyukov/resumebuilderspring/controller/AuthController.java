@@ -2,11 +2,14 @@ package tyulyukov.resumebuilderspring.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tyulyukov.resumebuilderspring.model.User;
 import tyulyukov.resumebuilderspring.service.UserService;
 
+@ResponseBody
 @RestController
+@CrossOrigin()
 @RequestMapping("/auth")
 public class AuthController {
   private final UserService userService;
@@ -16,22 +19,26 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public String login(@RequestBody User user) {
-    return userService.login(user.getUsername(), user.getPassword());
+  @ResponseBody
+  public ResponseEntity<String> login(@RequestBody User user) {
+    return ResponseEntity.ok(userService.login(user.getUsername(), user.getPassword()));
   }
 
   @PostMapping("/register")
-  public String register(@RequestBody User user) {
-    return userService.register(user);
+  @ResponseBody
+  public ResponseEntity<String> register(@RequestBody User user) {
+    return ResponseEntity.ok(userService.register(user));
   }
 
   @GetMapping(value = "/myself")
-  public User myself(HttpServletRequest req) {
-    return userService.myself(req);
+  @ResponseBody
+  public ResponseEntity<User> myself(HttpServletRequest req) {
+    return ResponseEntity.ok(userService.myself(req));
   }
 
   @GetMapping("/refresh")
-  public String refresh(HttpServletRequest req) {
-    return userService.refresh(req.getRemoteUser());
+  @ResponseBody
+  public ResponseEntity<String> refresh(HttpServletRequest req) {
+    return ResponseEntity.ok(userService.refresh(req.getRemoteUser()));
   }
 }

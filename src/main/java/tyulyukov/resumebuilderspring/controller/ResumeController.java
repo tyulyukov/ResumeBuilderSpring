@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@ResponseBody
 @RestController
+@CrossOrigin()
 @RequestMapping("/resumes")
 public class ResumeController {
   private final ResumeService resumeService;
@@ -23,6 +25,7 @@ public class ResumeController {
   }
 
   @GetMapping("/")
+  @ResponseBody
   public ResponseEntity<Resume[]> get(HttpServletRequest req) {
     var resumes = resumeService.getUserResumes(req);
 
@@ -30,6 +33,7 @@ public class ResumeController {
   }
 
   @PostMapping("/create")
+  @ResponseBody
   public ResponseEntity<String> create(@RequestBody Resume resume, HttpServletRequest req) {
     resumeService.create(resume, req);
 
@@ -39,6 +43,7 @@ public class ResumeController {
   }
 
   @GetMapping("/download/{id}")
+  @ResponseBody
   public ResponseEntity<String> download(@PathVariable int id, HttpServletRequest req, HttpServletResponse res) {
     var resume = resumeService.get(id, req);
 
@@ -54,6 +59,7 @@ public class ResumeController {
   }
 
   @DeleteMapping("/delete/{id}")
+  @ResponseBody
   public ResponseEntity<String> delete(@PathVariable int id, HttpServletRequest req) {
     resumeService.delete(id, req);
 
@@ -61,6 +67,7 @@ public class ResumeController {
   }
 
   @PatchMapping("/edit/{id}")
+  @ResponseBody
   public ResponseEntity<String> edit(@PathVariable int id, @RequestBody Resume newResume, HttpServletRequest req) {
     resumeService.edit(id, newResume, req);
 
