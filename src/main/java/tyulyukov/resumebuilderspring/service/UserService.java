@@ -64,6 +64,7 @@ public class UserService {
   public User myself(HttpServletRequest req) {
     var user = userRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
     user.setPassword(null);
+    user.setUserResumes(null);
     return user;
   }
 

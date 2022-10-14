@@ -24,7 +24,7 @@ public class ResumeController {
     this.resumePdfService = resumePdfService;
   }
 
-  @GetMapping("/")
+  @GetMapping("/get")
   @ResponseBody
   public ResponseEntity<Resume[]> get(HttpServletRequest req) {
     var resumes = resumeService.getUserResumes(req);

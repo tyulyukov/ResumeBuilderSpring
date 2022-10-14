@@ -33,7 +33,8 @@ public class AuthController {
   @GetMapping(value = "/myself")
   @ResponseBody
   public ResponseEntity<User> myself(HttpServletRequest req) {
-    return ResponseEntity.ok(userService.myself(req));
+    var user = userService.myself(req);
+    return ResponseEntity.ok(user);
   }
 
   @GetMapping("/refresh")
